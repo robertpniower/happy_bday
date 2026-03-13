@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    environment {
+        // Replace with your actual GitHub repo URL
+        REPO_URL = 'https://github.com/robertpniower/happy_bday.git'
+        IMAGE_NAME = 'mirna-bday-app'
+    }
+
+    stages {
+        stage('Cleanup Workspace') {
+            steps {
+                // Ensure we start with a fresh slate
+                cleanWs()
+            }
+        }
+
+        stage('Checkout from GitHub') {
+            steps {
+                // Pulls the code from your repository
+                git branch: 'main', url: "${REPO_URL}"
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                // 'bat' is used for Windows Command Prompt commands
+                bat "docker build -t ${IMAGE_NAME} ."
+            }
+        }
+
+        stage('Deploy to Local Network') {
+            steps {
+                script {
+                    // 1. Stop and remove the old container if it exists
+                    // '|| ver > nul' prevents the pipeline from failing if the container isn't running
+                    bat "docker stop ${IMAGE_NAME} || ver > nul"
+                    bat "docker rm ${IMAGE_NAME} || ver > nul"
+
+                    // 2. Run the new container on port 3000
+                    bat "docker run -d --name ${IMAGE_NAME} -p 3000:3000 --restart always ${IMAGE_NAME}"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'App is live at http://mirna.local'
+        }
+        failure {
+            echo 'Deployment failed. Check Docker Desktop and Jenkins logs.'
+        }
+    }
+}
