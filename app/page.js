@@ -1,66 +1,77 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+import React, { useState } from 'react';
+import { 
+  Box, 
+  Typography, 
+  Button, 
+  Card, 
+  CardContent, 
+  Container, 
+  Zoom,
+  Stack
+} from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import CakeIcon from '@mui/icons-material/Cake';
 
-export default function Home() {
+export default function BirthdayPage() {
+  const [showSecret, setShowSecret] = useState(false);
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.js file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <Box sx={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+      p: 2
+    }}>
+      <Container maxWidth="sm">
+        <Card sx={{ 
+          borderRadius: 5, 
+          boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+          textAlign: 'center',
+          p: 3
+        }}>
+          <CardContent>
+            <CakeIcon sx={{ fontSize: 60, color: '#FE6B8B', mb: 2 }} />
+            
+            <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: '#333' }}>
+              Mirna
+            </Typography>
+            
+            <Typography variant="h6" color="textSecondary" sx={{ mb: 4 }}>
+              Happy Birthday to the most amazing person! 
+            </Typography>
+
+            <Stack spacing={2} direction="column" alignItems="center">
+              <Button 
+                variant="contained" 
+                size="large"
+                startIcon={<FavoriteIcon />}
+                onClick={() => setShowSecret(!showSecret)}
+                sx={{ 
+                  borderRadius: 10,
+                  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+                  px: 4
+                }}
+              >
+                {showSecret ? "Hide Message" : "Open Your Gift"}
+              </Button>
+
+              <Zoom in={showSecret}>
+                <Box sx={{ mt: 4, display: showSecret ? 'block' : 'none' }}>
+                  <Typography variant="body1" sx={{ fontStyle: 'italic', fontSize: '1.2rem', color: '#555' }}>
+                    I built this server, the pipeline, and this website just to say how much I appreciate you. Have the best day ever!
+                  </Typography>
+                  <Typography sx={{ mt: 2, fontSize: '2rem' }}>
+                    🎈 🎁 🎊
+                  </Typography>
+                </Box>
+              </Zoom>
+            </Stack>
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 }
